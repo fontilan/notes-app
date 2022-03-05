@@ -7,15 +7,18 @@ import { nanoid } from "nanoid";
 import "./style.css";
 
 /**
- * Challenge: Spend 10-20+ minutes reading through the code
- * and trying to understand how it's currently working. Spend
- * as much time as you need to feel confident that you
- * understand the existing code (although you don't need
- * to fully understand everything to move on)
+ * Challenge:
+ * 1. Every time the `notes` array changes, save it
+ *    in localStorage. You'll need to use JSON.stringify()
+ *    to turn the array into a string to save in localStorage.
+ * 2. When the app first loads, initialize the notes state
+ *    with the notes saved in localStorage. You'll need to
+ *    use JSON.parse() to turn the stringified array back
+ *    into a real JS array.
  */
 
 export default function App() {
-  const [notes, setNotes] = React.useState([]);
+  const [notes, setNotes] = React.useState(/* insert code here */ []);
   const [currentNoteId, setCurrentNoteId] = React.useState(
     (notes[0] && notes[0].id) || ""
   );
@@ -37,6 +40,7 @@ export default function App() {
           : oldNote;
       })
     );
+    console.log(notes[0], notes[1], notes[2]);
   }
 
   function findCurrentNote() {
