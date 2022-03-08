@@ -1,19 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Editor from "./components/Editor";
-import { data } from "./data";
+// import { data } from "./data";
 import Split from "react-split";
 import { nanoid } from "nanoid";
 import "./style.css";
 
 export default function App() {
+  // We use a callback function so that the .getItem() method is only executed on the first render of the app
   const [notes, setNotes] = React.useState(
-    JSON.parse(localStorage.getItem("localNotes")) || []
+    () => JSON.parse(localStorage.getItem("localNotes")) || []
   );
+
   const [currentNoteId, setCurrentNoteId] = React.useState(
     (notes[0] && notes[0].id) || ""
   );
-
+  // We use useEffect() to timely update the localStorage, because of asynchonicity
   React.useEffect(() => {
     localStorage.setItem("localNotes", JSON.stringify(notes));
   }, [notes]);
