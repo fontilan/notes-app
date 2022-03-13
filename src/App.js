@@ -15,7 +15,7 @@ export default function App() {
   const [currentNoteId, setCurrentNoteId] = React.useState(
     (notes[0] && notes[0].id) || ""
   );
-  // We use useEffect() to timely update the localStorage, because of asynchonicity
+  // We use useEffect() to timely update the localStorage, because of asynchronicity
   React.useEffect(() => {
     localStorage.setItem("localNotes", JSON.stringify(notes));
   }, [notes]);
@@ -30,13 +30,16 @@ export default function App() {
   }
 
   function updateNote(text) {
-    setNotes(oldNotes =>
-      oldNotes.map(oldNote => {
-        return oldNote.id === currentNoteId
-          ? { ...oldNote, body: text }
-          : oldNote;
-      })
-    );
+    // We want to put the recently edited note to the top of the list
+    setNotes(oldNotes => {
+      let newArray = [];
+      for (let i = 0; i < oldNotes.length; i++) {
+        if (oldNotes[i].id === currentNoteId) {
+          newArray.unshift({ ...oldNotes[i], body: text });
+        } else newArray.push(oldNotes[i]);
+      }
+      return newArray;
+    });
   }
 
   function findCurrentNote() {
