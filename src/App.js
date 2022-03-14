@@ -1,4 +1,7 @@
-import React, { useEffect } from "react";
+// This app is an already made markdown notes app, to practise working on something more "real-life", understanding someone else's code, fixing bugs, adding new functionalities etc.
+// The comments added are my notes helping me to understand how the app works
+
+import React from "react";
 import Sidebar from "./components/Sidebar";
 import Editor from "./components/Editor";
 // import { data } from "./data";
@@ -15,6 +18,7 @@ export default function App() {
   const [currentNoteId, setCurrentNoteId] = React.useState(
     (notes[0] && notes[0].id) || ""
   );
+
   // We use useEffect() to timely update the localStorage, because of asynchronicity
   React.useEffect(() => {
     localStorage.setItem("localNotes", JSON.stringify(notes));
@@ -29,8 +33,8 @@ export default function App() {
     setCurrentNoteId(newNote.id);
   }
 
+  // We put the recently edited note to the top of the list
   function updateNote(text) {
-    // We want to put the recently edited note to the top of the list
     setNotes(oldNotes => {
       let newArray = [];
       for (let i = 0; i < oldNotes.length; i++) {
@@ -40,6 +44,12 @@ export default function App() {
       }
       return newArray;
     });
+  }
+
+  // To delete the note we take the oldNotes array and filter out the one note that we want to delete by checking if its id matches the id passed by the onClick event in the Sidebar which calls the function
+  function deleteNote(event, noteId) {
+    event.stopPropagation();
+    setNotes(oldNotes => oldNotes.filter(note => note.id !== noteId));
   }
 
   function findCurrentNote() {
@@ -59,6 +69,7 @@ export default function App() {
             currentNote={findCurrentNote()}
             setCurrentNoteId={setCurrentNoteId}
             newNote={createNewNote}
+            deleteNote={deleteNote}
           />
           {currentNoteId && notes.length > 0 && (
             <Editor currentNote={findCurrentNote()} updateNote={updateNote} />
